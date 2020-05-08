@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Ionicon from 'react-ionicons'
 import MonthPicker from '../components/MonthPicker'
 import logo from '../logo.svg'
 import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseToYearAndMonth, padLeft } from '../utility'
@@ -9,7 +7,7 @@ import ViewTab from '../components/ViewTab'
 import CreateBtn from '../components/CreateBtn'
 import PriceList from '../components/PriceList'
 
-const categories = {
+export const categories = {
   '1': {
     'id': 1,
     'name': '旅行',
@@ -24,7 +22,7 @@ const categories = {
   }
 }
 
-const items = [
+export const items = [
   {
     'id': 1,
     'title': '旅游',
@@ -41,7 +39,7 @@ const items = [
   }
 ]
 
-const newItem = {
+export const newItem = {
   'id': 3,
   'title': '旅游',
   'price': 300,
@@ -102,7 +100,7 @@ class Home extends Component {
           }
           {
             tabView === CHART_VIEW &&
-            <h1>图表区域</h1>
+            <h1 className="chart-title">图表区域</h1>
           }
         </div>
       </React.Fragment>
