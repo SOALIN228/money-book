@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import toJson from 'enzyme-to-json'
 import CategorySelect from '../CategorySelect'
 import Ionicon from 'react-ionicons'
 
@@ -36,6 +37,10 @@ let props_with_category = {
 }
 
 describe('test CategorySelect component', () => {
+  it('should render the component to match the snapshot', () => {
+    const wrapper = shallow(<CategorySelect {...props_with_category} />)
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
   it('renders with categories should render the correct items', () => {
     const wrapper = shallow(<CategorySelect {...props} />)
     expect(wrapper.find('.category-item').length).toEqual(categories.length)
