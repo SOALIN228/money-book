@@ -6,6 +6,10 @@ import TotalPrice from '../components/TotalPrice'
 import ViewTab from '../components/ViewTab'
 import CreateBtn from '../components/CreateBtn'
 import PriceList from '../components/PriceList'
+import { Tabs, Tab } from '../components/Tabs'
+import Ionicon from 'react-ionicons'
+
+const tabsText = [LIST_VIEW, CHART_VIEW]
 
 export const categories = {
   '1': {
@@ -53,12 +57,13 @@ class Home extends Component {
     this.state = {
       items,
       currentDate: parseToYearAndMonth(),
-      tabView: LIST_VIEW
+      tabView: tabsText[0]
     }
   }
 
   render () {
     const { items, currentDate, tabView } = this.state
+    const tabIndex = tabsText.findIndex(tabText => tabText === tabView)
     let totalIncome = 0, totalOutcome = 0
     const itemsWithCategory = items.map(item => {
       item.category = categories[item.cid]
@@ -89,7 +94,24 @@ class Home extends Component {
           </div>
         </header>
         <div className="content-area py-3 px-3">
-          <ViewTab activeTab={tabView} onTabChange={this.changeView}/>
+          <Tabs activeIndex={tabIndex} onTabChange={this.changeView}>
+            <Tab>
+              <Ionicon className="rounded-circle mr-2"
+                       fontSize="25px"
+                       color={'#007bff'}
+                       icon='ios-paper'
+              />
+              列表模式
+            </Tab>
+            <Tab>
+              <Ionicon className="rounded-circle mr-2"
+                       fontSize="25px"
+                       color={'#007bff'}
+                       icon='ios-pie'
+              />
+              图表模式
+            </Tab>
+          </Tabs>
           <CreateBtn onClick={this.createItem}/>
           {
             tabView === LIST_VIEW &&
@@ -107,21 +129,24 @@ class Home extends Component {
     )
   }
 
-  changeView = view => {
+  changeView = index => {
     this.setState({
-      tabView: view
+      tabView: tabsText[index]
     })
   }
+
   changeDate = (year, month) => {
     this.setState({
       currentDate: { year, month }
     })
   }
+
   createItem = () => {
     this.setState({
       items: [newItem, ...this.state.items]
     })
   }
+
   modifyItem = modifyItem => {
     const modifyItems = this.state.items.map(item => {
       if (item.id === modifyItem.id) {
@@ -136,6 +161,7 @@ class Home extends Component {
       items: modifyItems
     })
   }
+
   deleteItem = deleteItem => {
     const filteredItems = this.state.items.filter(item => item.id !== deleteItem.id)
     this.setState({
