@@ -30,3 +30,10 @@ export const isValidDate = (dateString) => {
   if (Number.isNaN(d.getTime())) return false // Invalid date
   return d.toISOString().slice(0, 10) === dateString
 }
+
+export const flatterArr = (arr) => {
+  return arr.reduce((map, item) => {
+    map[item.id] = item
+    return map
+  }, {})
+}

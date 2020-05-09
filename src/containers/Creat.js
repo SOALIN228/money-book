@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Tabs, Tab } from '../components/Tabs'
 import CategorySelect from '../components/CategorySelect'
+import PriceForm from '../components/PriceForm'
+import withContext from '../WithContext'
 import { testCategories } from '../testData'
 import { TYPE_INCOME, TYPE_OUTCOME } from '../utility'
-import PriceForm from '../components/PriceForm'
 
 class Create extends Component {
   constructor (props) {
@@ -23,13 +24,13 @@ class Create extends Component {
                         onSelectCategory={() => {
                         }}
         />
-        <PriceForm onFormSubmit={() => {
-        }} onCancelSubmit={() => {
+        <PriceForm item={{}}
+                   onFormSubmit={() => {
+                   }} onCancelSubmit={() => {
         }}/>
       </div>
     )
   }
 }
 
-
-export default Create
+export default withContext(Create)

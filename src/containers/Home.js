@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import MonthPicker from '../components/MonthPicker'
-import logo from '../logo.svg'
-import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseToYearAndMonth, padLeft } from '../utility'
 import TotalPrice from '../components/TotalPrice'
 import CreateBtn from '../components/CreateBtn'
 import PriceList from '../components/PriceList'
 import { Tabs, Tab } from '../components/Tabs'
+import withContext from '../WithContext'
+import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseToYearAndMonth, padLeft } from '../utility'
 import Ionicon from 'react-ionicons'
+import logo from '../logo.svg'
 
 const tabsText = [LIST_VIEW, CHART_VIEW]
 
@@ -61,6 +62,8 @@ class Home extends Component {
   }
 
   render () {
+    const { data } = this.props
+    console.log(data)
     const { items, currentDate, tabView } = this.state
     const tabIndex = tabsText.findIndex(tabText => tabText === tabView)
     let totalIncome = 0, totalOutcome = 0
@@ -169,4 +172,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default withContext(Home)
