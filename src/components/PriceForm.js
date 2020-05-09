@@ -3,55 +3,12 @@ import PropTypes from 'prop-types'
 import { isValidDate } from '../utility'
 
 class PriceForm extends Component {
-  static propTypes = {
-    onFormSubmit: PropTypes.func.isRequired,
-    onCancelSubmit: PropTypes.func.isRequired,
-    item: PropTypes.object,
-  }
-  static defaultProps = {
-    item: {}
-  }
-  state = {
-    validatePass: true,
-    errorMessage: '',
-  }
-  submitForm = (event) => {
-    const { item, onFormSubmit } = this.props
-    const editMode = !!item.id
-    const price = this.priceInput.value.trim() * 1
-    const date = this.dateInput.value.trim()
-    const title = this.titleInput.value.trim()
-    if (price && date && title) {
-      if (price < 0) {
-        this.setState({
-          validatePass: false,
-          errorMessage: '价格数字必须大于0'
-        })
-      } else if (!isValidDate(date)) {
-        this.setState({
-          validatePass: false,
-          errorMessage: '请填写正确的日期格式'
-        })
-      } else {
-        this.setState({
-          validatePass: true,
-          errorMessage: ''
-        })
-        if (editMode) {
-          // 编辑
-          onFormSubmit({ ...item, title, price, date }, editMode)
-        } else {
-          // 新建
-          onFormSubmit({ title, price, date }, editMode)
-        }
-      }
-    } else {
-      this.setState({
-        validatePass: false,
-        errorMessage: '请输入所有必选项'
-      })
+  constructor (props) {
+    super(props)
+    this.state = {
+      validatePass: true,
+      errorMessage: ''
     }
-    event.preventDefault()
   }
 
   render () {
@@ -91,13 +48,13 @@ class PriceForm extends Component {
           <input type="date" className="form-control"
                  id="date" placeholder="请输入日期"
                  defaultValue={date}
-                 ref={(input) => {
+                 ref={input => {
                    this.dateInput = input
                  }}
           />
         </div>
         <button type="submit" className="btn btn-primary mr-3">提交</button>
-        <button className="btn btn-secondary" onClick={this.props.onCancelSubmit}> 取消</button>
+        <button className="btn btn-secondary" onClick={this.props.onCancelSubmit}>取消</button>
         {!this.state.validatePass &&
         <div className="alert alert-danger mt-5" role="alert">
           {this.state.errorMessage}
@@ -106,6 +63,51 @@ class PriceForm extends Component {
       </form>
     )
   }
+
+  submitForm = event => {
+    const { item, onFormSubmit } = this.props
+    const editMode = !!item.id
+    const price = this.priceInput.value.trim() * 1
+    const date = this.dateInput.value.trim()
+    const title = this.titleInput.value.trim()
+    if (price && date && title) {
+      if (price < 0) {
+        this.setState({
+          validatePass: false,
+          errorMessage: '价格数字必须大于0'
+        })
+      } else if (!isValidDate(date)) {
+        this.setState({
+          validatePass: false,
+          errorMessage: '请填写正确的日期格式'
+        })
+      } else {
+        this.setState({
+          validatePass: true,
+          errorMessage: ''
+        })
+        if (editMode) {
+          // 编辑
+          onFormSubmit({ ...item, title, price, date }, editMode)
+        } else {
+          // 新建
+          onFormSubmit({ title, price, date }, editMode)
+        }
+      }
+    } else {
+      this.setState({
+        validatePass: false,
+        errorMessage: '请输入所有必选项'
+      })
+    }
+    event.preventDefault()
+  }
+}
+
+PriceForm.propTypes = {
+  onFormSubmit: PropTypes.func.isRequired,
+  onCancelSubmit: PropTypes.func.isRequired,
+  item: PropTypes.object,
 }
 
 export default PriceForm

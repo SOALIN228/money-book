@@ -10,14 +10,6 @@ class CategorySelect extends Component {
     }
   }
 
-  selectCategory = (event, category) => {
-    event.preventDefault()
-    this.setState({
-      selectedCategoryId: category.id
-    })
-    this.props.onSelectCategory(category)
-  }
-
   render () {
     const { categories } = this.props
     const { selectedCategoryId } = this.state
@@ -26,17 +18,21 @@ class CategorySelect extends Component {
         <div className="row">
           {
             categories.map((category, index) => {
+              const iconColor = (category.id === selectedCategoryId) ? '#fff' : '#555'
+              const backColor = (category.id === selectedCategoryId) ? '#347eff' : '#efefef'
               const activeClassName = (selectedCategoryId === category.id)
                 ? 'category-item col-3 active' : 'category-item col-3'
               return (
-                <div className={activeClassName} key={index}
+                <div className={activeClassName} key={index} role="button"
+                     style={{ textAlign: 'center' }}
                      onClick={event => {
                        this.selectCategory(event, category)
                      }}
                 >
                   <Ionicon className="rounded-circle"
+                           style={{ backgroundColor: backColor, padding: '5px' }}
                            fontSize="50px"
-                           color="#555"
+                           color={iconColor}
                            icon={category.iconName}
                   />
                 </div>
@@ -47,6 +43,20 @@ class CategorySelect extends Component {
       </div>
     )
   }
+
+  selectCategory = (event, category) => {
+    event.preventDefault()
+    this.setState({
+      selectedCategoryId: category.id
+    })
+    this.props.onSelectCategory(category)
+  }
+}
+
+CategorySelect.propTypes = {
+  categories: PropTypes.array.isRequired,
+  selectedCategory: PropTypes.object,
+  onSelectCategory: PropTypes.func.isRequired,
 }
 
 export default CategorySelect

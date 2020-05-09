@@ -5,6 +5,7 @@ import PriceForm from '../PriceForm'
 import { testItems } from '../../testData'
 
 let props = {
+  item: {},
   onFormSubmit: jest.fn(),
   onCancelSubmit: jest.fn(),
 }
