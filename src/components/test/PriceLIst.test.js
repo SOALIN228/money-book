@@ -2,8 +2,39 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import toJson from 'enzyme-to-json'
 import PriceList from '../PriceList'
-import { items, categories } from '../../containers/Home'
 import Ionicon from 'react-ionicons'
+
+const categories = {
+  '1': {
+    'id': 1,
+    'name': '旅行',
+    'type': 'outcome',
+    'iconName': 'ios-plane'
+  },
+  '2': {
+    'id': 2,
+    'name': '理财',
+    'type': 'income',
+    'iconName': 'logo-yen'
+  }
+}
+
+const items = [
+  {
+    'id': 1,
+    'title': '旅游',
+    'price': 200,
+    'date': '2020-05-05',
+    'cid': 1
+  },
+  {
+    'id': 2,
+    'title': '理财',
+    'price': 400,
+    'date': '2020-06-05',
+    'cid': 2
+  }
+]
 
 const itemsWithCategory = items.map(item => {
   item.category = categories[item.cid]
