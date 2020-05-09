@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 import MonthPicker from '../components/MonthPicker'
 import TotalPrice from '../components/TotalPrice'
 import CreateBtn from '../components/CreateBtn'
@@ -55,7 +56,6 @@ class Home extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      items,
       currentDate: parseToYearAndMonth(),
       tabView: tabsText[0]
     }
@@ -63,13 +63,13 @@ class Home extends Component {
 
   render () {
     const { data } = this.props
-    console.log(data)
-    const { items, currentDate, tabView } = this.state
+    const { items, categories } = data
+    const { currentDate, tabView } = this.state
     const tabIndex = tabsText.findIndex(tabText => tabText === tabView)
     let totalIncome = 0, totalOutcome = 0
-    const itemsWithCategory = items.map(item => {
-      item.category = categories[item.cid]
-      return item
+    const itemsWithCategory = Object.keys(items).map(id => {
+      items[id].category = categories[items[id].cid]
+      return items[id]
     }).filter(item => {
       return item.date.includes(`${currentDate.year}-${padLeft(currentDate.month)}`)
     })
@@ -144,32 +144,16 @@ class Home extends Component {
   }
 
   createItem = () => {
-    this.setState({
-      items: [newItem, ...this.state.items]
-    })
+    this.props.history.push('/create')
   }
 
-  modifyItem = modifyItem => {
-    const modifyItems = this.state.items.map(item => {
-      if (item.id === modifyItem.id) {
-        return {
-          ...item, title: 'new title'
-        }
-      } else {
-        return item
-      }
-    })
-    this.setState({
-      items: modifyItems
-    })
+  modifyItem = item => {
+    this.props.history.push(`/edit/${item.id}`)
   }
 
-  deleteItem = deleteItem => {
-    const filteredItems = this.state.items.filter(item => item.id !== deleteItem.id)
-    this.setState({
-      items: filteredItems
-    })
+  deleteItem = item => {
+    this.props.actions.deleteItem(item)
   }
 }
 
-export default withContext(Home)
+export default withRouter(withContext(Home))
