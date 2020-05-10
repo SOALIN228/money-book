@@ -7,12 +7,33 @@ import TotalPrice from '../components/TotalPrice'
 import CreateBtn from '../components/CreateBtn'
 import PriceList from '../components/PriceList'
 import { Tabs, Tab } from '../components/Tabs'
+import CustomPieChart from '../components/CustomPieChart'
 import Loader from '../components/Loader'
 import Ionicon from 'react-ionicons'
-import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME } from '../utility'
+import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, Colors } from '../utility'
 import logo from '../logo.svg'
 
 const tabsText = [LIST_VIEW, CHART_VIEW]
+
+const generateChartDataByCategory = (items, type = TYPE_OUTCOME) => {
+  let categoryMap = {}
+  items.filter(item => item.category.type === type).forEach((item) => {
+    if (categoryMap[item.cid]) {
+      categoryMap[item.cid].value += (item.price * 1)
+      categoryMap[item.cid].items = [...categoryMap[item.cid].items, item.id]
+    } else {
+      categoryMap[item.cid] = {
+        category: item.category,
+        value: item.price * 1,
+        items: [item.id]
+      }
+    }
+  })
+  return Object.keys(categoryMap).map(mapKey => ({
+    ...categoryMap[mapKey],
+    name: categoryMap[mapKey].category.name
+  }))
+}
 
 export class Home extends Component {
   constructor (props) {
@@ -40,6 +61,8 @@ export class Home extends Component {
         totalIncome += item.price
       }
     })
+    const chartOutcomeDataByCategory = generateChartDataByCategory(itemsWithCategory, TYPE_OUTCOME)
+    const chartIncomeDataByCategory = generateChartDataByCategory(itemsWithCategory, TYPE_INCOME)
     return (
       <React.Fragment>
         <header className="App-header">
@@ -66,7 +89,7 @@ export class Home extends Component {
                 <Tab>
                   <Ionicon className="rounded-circle mr-2"
                            fontSize="25px"
-                           color={'#007bff'}
+                           color={Colors.blue}
                            icon='ios-paper'
                   />
                   列表模式
@@ -74,7 +97,7 @@ export class Home extends Component {
                 <Tab>
                   <Ionicon className="rounded-circle mr-2"
                            fontSize="25px"
-                           color={'#007bff'}
+                           color={Colors.blue}
                            icon='ios-pie'
                   />
                   图表模式
@@ -94,9 +117,11 @@ export class Home extends Component {
                            onDeleteItem={this.deleteItem}
                 />
               }
-              {
-                tabView === CHART_VIEW &&
-                <h1 className="chart-title">图表区域</h1>
+              {tabView === CHART_VIEW &&
+              <React.Fragment>
+                <CustomPieChart title="本月支出" categoryData={chartOutcomeDataByCategory}/>
+                <CustomPieChart title="本月收入" categoryData={chartIncomeDataByCategory}/>
+              </React.Fragment>
               }
             </React.Fragment>
           }

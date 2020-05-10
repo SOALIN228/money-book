@@ -18,7 +18,8 @@ export class Tabs extends Component {
           const activeClassName = (activeIndex === index) ? 'nav-link active' : 'nav-link'
           return (
             <li className="nav-item">
-              <a href="#" className={activeClassName}
+              <a href="#" role="button"
+                 className={activeClassName}
                  onClick={event => {
                    this.tabChange(event, index)
                  }}

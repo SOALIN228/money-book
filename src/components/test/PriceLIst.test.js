@@ -61,7 +61,6 @@ describe('test PriceList component', () => {
     expect(wrapper.find('.list-group-item').length).toEqual(itemsWithCategory.length)
   })
   it('should render correct icon and price for each item', () => {
-    // 获取数组的一个的元素中的 Ionicon
     const iconList = wrapper.find('.list-group-item').first().find(Ionicon)
     expect(iconList.length).toEqual(3)
     expect(iconList.first().props().icon)
@@ -69,11 +68,15 @@ describe('test PriceList component', () => {
   })
   it('should trigger the correct function callbacks', () => {
     const firstItem = wrapper.find('.list-group-item').first()
-    // 模拟点击事件的执行
-    firstItem.find('a').first().simulate('click')
-    // 方法调用时的参数为 itemsWithCategory[0]
+    firstItem.find('a').first().simulate('click', {
+      preventDefault: () => {
+      }
+    })
     expect(props.onModifyItem).toHaveBeenCalledWith(itemsWithCategory[0])
-    firstItem.find('a').last().simulate('click')
+    firstItem.find('a').last().simulate('click', {
+      preventDefault: () => {
+      }
+    })
     expect(props.onDeleteItem).toHaveBeenCalledWith(itemsWithCategory[0])
   })
 })

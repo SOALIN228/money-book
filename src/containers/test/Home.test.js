@@ -6,6 +6,7 @@ import { parseToYearAndMonth, flatterArr, LIST_VIEW, CHART_VIEW } from '../../ut
 import Loader from '../../components/Loader'
 import PriceList from '../../components/PriceList'
 import { Tabs } from '../../components/Tabs'
+import CustomPieChart from '../../components/CustomPieChart'
 import { testCategories, testItems } from '../../testData'
 
 const initData = {
@@ -19,12 +20,14 @@ const withLoadingData = {
   ...initData,
   isLoading: true
 }
+
 const withLoadedData = {
   categories: flatterArr(testCategories),
   items: flatterArr(testItems),
   isLoading: false,
   currentDate: parseToYearAndMonth()
 }
+
 const actions = {
   getInitData: jest.fn(),
   selectNewMonth: jest.fn(),
@@ -76,6 +79,7 @@ describe('test home container with loaded data', () => {
   it('click the the tab should change the view and state', () => {
     wrapper.find('.nav-tabs .nav-item a').at(1).simulate('click')
     expect(wrapper.find(PriceList).length).toEqual(0)
+    expect(wrapper.find(CustomPieChart).length).toEqual(2)
     expect(wrapperInstance.state.tabView).toEqual(CHART_VIEW)
   })
 })

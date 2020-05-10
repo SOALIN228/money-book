@@ -12,6 +12,7 @@ exports[`test Tabs and Tab Component should render the component to match the sn
       className="nav-link active"
       href="#"
       onClick={[Function]}
+      role="button"
     >
       <Tab>
         1
@@ -26,6 +27,7 @@ exports[`test Tabs and Tab Component should render the component to match the sn
       className="nav-link"
       href="#"
       onClick={[Function]}
+      role="button"
     >
       <Tab>
         2

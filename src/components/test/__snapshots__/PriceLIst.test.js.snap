@@ -21,7 +21,7 @@ exports[`test PriceList component should render the component to match snapshot 
         shake={false}
         style={
           Object {
-            "backgroundColor": "#007bff",
+            "backgroundColor": "#347eff",
             "padding": "5px",
           }
         }
@@ -104,7 +104,7 @@ exports[`test PriceList component should render the component to match snapshot 
         shake={false}
         style={
           Object {
-            "backgroundColor": "#007bff",
+            "backgroundColor": "#347eff",
             "padding": "5px",
           }
         }

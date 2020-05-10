@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Ionicon from 'react-ionicons'
 import PropTypes from 'prop-types'
+import { Colors } from '../utility'
 
 class CategorySelect extends Component {
   render () {
@@ -11,8 +12,8 @@ class CategorySelect extends Component {
         <div className="row">
           {
             categories.map((category, index) => {
-              const iconColor = (category.id === selectedCategoryId) ? '#fff' : '#555'
-              const backColor = (category.id === selectedCategoryId) ? '#347eff' : '#efefef'
+              const iconColor = (category.id === selectedCategoryId) ? Colors.white : Colors.gray
+              const backColor = (category.id === selectedCategoryId) ? Colors.blue : Colors.lightGray
               const activeClassName = (selectedCategoryId === category.id)
                 ? 'category-item col-3 active' : 'category-item col-3'
               return (

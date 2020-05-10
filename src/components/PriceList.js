@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Ionicon from 'react-ionicons'
+import { Colors } from '../utility'
 
 const PriceList = ({ items, onModifyItem, onDeleteItem }) => {
   return (
@@ -11,7 +12,7 @@ const PriceList = ({ items, onModifyItem, onDeleteItem }) => {
             <span className="col-1 badge badge-primary">
               <Ionicon className="rounded-circle"
                        fontSize="30px"
-                       style={{ backgroundColor: '#007bff', padding: '5px' }}
+                       style={{ backgroundColor: Colors.blue, padding: '5px' }}
                        color={'#fff'}
                        icon={item.category.iconName}
               />
@@ -30,7 +31,7 @@ const PriceList = ({ items, onModifyItem, onDeleteItem }) => {
             >
               <Ionicon className="rounded-circle"
                        fontSize="30px"
-                       style={{ backgroundColor: '#28a745', padding: '5px' }}
+                       style={{ backgroundColor: Colors.green, padding: '5px' }}
                        color={'#fff'}
                        icon='ios-create-outline'
               />
@@ -43,7 +44,7 @@ const PriceList = ({ items, onModifyItem, onDeleteItem }) => {
             >
               <Ionicon className="rounded-circle"
                        fontSize="30px"
-                       style={{ backgroundColor: '#dc3545', padding: '5px' }}
+                       style={{ backgroundColor: Colors.red, padding: '5px' }}
                        color={'#fff'}
                        icon='ios-close'
               />
