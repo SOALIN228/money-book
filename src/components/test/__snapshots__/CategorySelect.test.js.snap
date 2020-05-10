@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test CategorySelect component should render the component to match the snapshot 1`] = `
+<div
+  className="category-select-component"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="category-item col-3 active"
+      key="0"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      <Ionicon
+        beat={false}
+        className="rounded-circle"
+        color="#fff"
+        fontSize="50px"
+        icon="ios-plane"
+        rotate={false}
+        shake={false}
+        style={
+          Object {
+            "backgroundColor": "#347eff",
+            "padding": "5px",
+          }
+        }
+      />
+    </div>
+    <div
+      className="category-item col-3"
+      key="1"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      <Ionicon
+        beat={false}
+        className="rounded-circle"
+        color="#555"
+        fontSize="50px"
+        icon="logo-yen"
+        rotate={false}
+        shake={false}
+        style={
+          Object {
+            "backgroundColor": "#efefef",
+            "padding": "5px",
+          }
+        }
+      />
+    </div>
+    <div
+      className="category-item col-3"
+      key="2"
+      onClick={[Function]}
+      role="button"
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      <Ionicon
+        beat={false}
+        className="rounded-circle"
+        color="#555"
+        fontSize="50px"
+        icon="logo-yen"
+        rotate={false}
+        shake={false}
+        style={
+          Object {
+            "backgroundColor": "#efefef",
+            "padding": "5px",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

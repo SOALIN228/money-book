@@ -16,4 +16,5 @@ TotalPrice.propTypes = {
   income: PropTypes.number.isRequired,
   outcome: PropTypes.number.isRequired,
 }
+
 export default TotalPrice

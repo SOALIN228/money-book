@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import withContext from '../WithContext'
+import PropTypes from 'prop-types'
 import { Tabs, Tab } from '../components/Tabs'
 import CategorySelect from '../components/CategorySelect'
 import PriceForm from '../components/PriceForm'
-import withContext from '../WithContext'
 import { TYPE_INCOME, TYPE_OUTCOME } from '../utility'
 
 const tabsText = [TYPE_OUTCOME, TYPE_INCOME]
@@ -11,20 +12,18 @@ const tabsText = [TYPE_OUTCOME, TYPE_INCOME]
 class Create extends Component {
   constructor (props) {
     super(props)
-    const { id } = props.match.params
-    const { categories, items } = props.data
     this.state = {
-      selectedTab: (id && items) ? categories[items[id].cid].type : TYPE_OUTCOME,
-      selectedCategory: (id && items) ? categories[items[id].cid] : null,
-      validationPassed: true,
+      selectedTab: TYPE_OUTCOME,
+      selectedCategory: null,
+      validationPassed: true
     }
   }
 
   render () {
     const { data } = this.props
     const { items, categories } = data
-    const { selectedTab, selectedCategory } = this.state
     const { id } = this.props.match.params
+    const { selectedTab, selectedCategory, validationPassed } = this.state
     const editItem = (id && items[id]) ? items[id] : {}
     const filterCategories = Object.keys(categories)
       .filter(id => categories[id].type === selectedTab)
@@ -44,8 +43,24 @@ class Create extends Component {
                    onFormSubmit={this.submitForm}
                    onCancelSubmit={this.cancelSubmit}
         />
+        {!validationPassed &&
+        <div className="alert alert-danger mt-5" role="alert">
+          请选择分类信息
+        </div>
+        }
       </div>
     )
+  }
+
+  componentDidMount () {
+    const { id } = this.props.match.params
+    this.props.actions.getEditData(id).then(data => {
+      const { editItem, categories } = data
+      this.setState({
+        selectedTab: (id && editItem) ? categories[editItem.cid].type : TYPE_OUTCOME,
+        selectedCategory: (id && editItem) ? categories[editItem.cid] : null
+      })
+    })
   }
 
   tabChange = index => {
@@ -81,6 +96,13 @@ class Create extends Component {
   cancelSubmit = () => {
     this.props.history.push('/')
   }
+}
+
+Create.propTypes = {
+  data: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+  history: PropTypes.object,
+  match: PropTypes.object
 }
 
 export default withRouter(withContext(Create))

@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import withContext from '../WithContext'
+import PropTypes from 'prop-types'
 import MonthPicker from '../components/MonthPicker'
 import TotalPrice from '../components/TotalPrice'
 import CreateBtn from '../components/CreateBtn'
 import PriceList from '../components/PriceList'
 import { Tabs, Tab } from '../components/Tabs'
-import withContext from '../WithContext'
-import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME, parseToYearAndMonth, padLeft } from '../utility'
+import Loader from '../components/Loader'
 import Ionicon from 'react-ionicons'
+import { LIST_VIEW, CHART_VIEW, TYPE_INCOME, TYPE_OUTCOME } from '../utility'
 import logo from '../logo.svg'
 
 const tabsText = [LIST_VIEW, CHART_VIEW]
@@ -56,22 +58,20 @@ class Home extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentDate: parseToYearAndMonth(),
       tabView: tabsText[0]
     }
   }
 
   render () {
     const { data } = this.props
-    const { items, categories } = data
-    const { currentDate, tabView } = this.state
+    const { items, categories, currentDate, isLoading } = data
+    const { tabView } = this.state
     const tabIndex = tabsText.findIndex(tabText => tabText === tabView)
     let totalIncome = 0, totalOutcome = 0
+    // 将items 与其对应的category 进行数据组合
     const itemsWithCategory = Object.keys(items).map(id => {
       items[id].category = categories[items[id].cid]
       return items[id]
-    }).filter(item => {
-      return item.date.includes(`${currentDate.year}-${padLeft(currentDate.month)}`)
     })
     itemsWithCategory.forEach(item => {
       if (item.category.type === TYPE_OUTCOME) {
@@ -96,39 +96,51 @@ class Home extends Component {
           </div>
         </header>
         <div className="content-area py-3 px-3">
-          <Tabs activeIndex={tabIndex} onTabChange={this.changeView}>
-            <Tab>
-              <Ionicon className="rounded-circle mr-2"
-                       fontSize="25px"
-                       color={'#007bff'}
-                       icon='ios-paper'
-              />
-              列表模式
-            </Tab>
-            <Tab>
-              <Ionicon className="rounded-circle mr-2"
-                       fontSize="25px"
-                       color={'#007bff'}
-                       icon='ios-pie'
-              />
-              图表模式
-            </Tab>
-          </Tabs>
-          <CreateBtn onClick={this.createItem}/>
           {
-            tabView === LIST_VIEW &&
-            <PriceList items={itemsWithCategory}
-                       onModifyItem={this.modifyItem}
-                       onDeleteItem={this.deleteItem}
-            />
+            isLoading && <Loader/>
           }
           {
-            tabView === CHART_VIEW &&
-            <h1 className="chart-title">图表区域</h1>
+            !isLoading &&
+            <React.Fragment>
+              <Tabs activeIndex={tabIndex} onTabChange={this.changeView}>
+                <Tab>
+                  <Ionicon className="rounded-circle mr-2"
+                           fontSize="25px"
+                           color={'#007bff'}
+                           icon='ios-paper'
+                  />
+                  列表模式
+                </Tab>
+                <Tab>
+                  <Ionicon className="rounded-circle mr-2"
+                           fontSize="25px"
+                           color={'#007bff'}
+                           icon='ios-pie'
+                  />
+                  图表模式
+                </Tab>
+              </Tabs>
+              <CreateBtn onClick={this.createItem}/>
+              {
+                tabView === LIST_VIEW &&
+                <PriceList items={itemsWithCategory}
+                           onModifyItem={this.modifyItem}
+                           onDeleteItem={this.deleteItem}
+                />
+              }
+              {
+                tabView === CHART_VIEW &&
+                <h1 className="chart-title">图表区域</h1>
+              }
+            </React.Fragment>
           }
         </div>
       </React.Fragment>
     )
+  }
+
+  componentDidMount () {
+    this.props.actions.getInitData()
   }
 
   changeView = index => {
@@ -138,9 +150,7 @@ class Home extends Component {
   }
 
   changeDate = (year, month) => {
-    this.setState({
-      currentDate: { year, month }
-    })
+    this.props.actions.selectNewMonth(year, month)
   }
 
   createItem = () => {
@@ -154,6 +164,12 @@ class Home extends Component {
   deleteItem = item => {
     this.props.actions.deleteItem(item)
   }
+}
+
+Home.propTypes = {
+  data: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+  history: PropTypes.object
 }
 
 export default withRouter(withContext(Home))
