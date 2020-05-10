@@ -14,47 +14,7 @@ import logo from '../logo.svg'
 
 const tabsText = [LIST_VIEW, CHART_VIEW]
 
-export const categories = {
-  '1': {
-    'id': 1,
-    'name': '旅行',
-    'type': 'outcome',
-    'iconName': 'ios-plane'
-  },
-  '2': {
-    'id': 2,
-    'name': '理财',
-    'type': 'income',
-    'iconName': 'logo-yen'
-  }
-}
-
-export const items = [
-  {
-    'id': 1,
-    'title': '旅游',
-    'price': 200,
-    'date': '2020-05-05',
-    'cid': 1
-  },
-  {
-    'id': 2,
-    'title': '理财',
-    'price': 400,
-    'date': '2020-06-05',
-    'cid': 2
-  }
-]
-
-export const newItem = {
-  'id': 3,
-  'title': '旅游',
-  'price': 300,
-  'date': '2020-05-05',
-  'cid': 1
-}
-
-class Home extends Component {
+export class Home extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -121,6 +81,12 @@ class Home extends Component {
                 </Tab>
               </Tabs>
               <CreateBtn onClick={this.createItem}/>
+              {
+                tabView === LIST_VIEW && itemsWithCategory.length === 0 &&
+                <div className="alert alert-light text-center no-record">
+                  您还没有任何记账记录
+                </div>
+              }
               {
                 tabView === LIST_VIEW &&
                 <PriceList items={itemsWithCategory}

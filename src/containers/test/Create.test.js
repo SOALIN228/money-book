@@ -1,0 +1,117 @@
+import React from 'react'
+import { mount } from 'enzyme'
+import { MemoryRouter } from 'react-router-dom'
+import { Create } from '../Create'
+import Loader from '../../components/Loader'
+import CategorySelect from '../../components/CategorySelect'
+import PriceForm from '../../components/PriceForm'
+import { parseToYearAndMonth, flatterArr, TYPE_OUTCOME } from '../../utility'
+import { testCategories, testItems } from '../../testData'
+
+const testItem = testItems[0]
+const match = { params: { id: testItem.id } }
+const history = {
+  push: () => {
+  }
+}
+const createMatch = { params: { id: '' } }
+
+const initData = {
+  categories: {},
+  items: {},
+  isLoading: false,
+  currentDate: parseToYearAndMonth()
+}
+
+const actions = {
+  getEditData: jest.fn().mockReturnValue(Promise.resolve({
+    editItem: testItem,
+    categories: flatterArr(testCategories)
+  })),
+  updateItem: jest.fn().mockReturnValueOnce(Promise.resolve('')),
+  createItem: jest.fn().mockReturnValueOnce(Promise.resolve(''))
+}
+
+const withLoadedData = {
+  categories: flatterArr(testCategories),
+  items: flatterArr(testItems),
+  isLoading: false,
+  currentDate: parseToYearAndMonth()
+}
+
+const loadingData = {
+  ...initData,
+  isLoading: true
+}
+
+describe('test component init behavior', () => {
+  it('test Create page for the first render, getEditData should be called with the right params', () => {
+    const wrapper = mount(
+      <MemoryRouter>
+        <Create data={initData} actions={actions} match={match}/>
+      </MemoryRouter>
+    )
+    expect(actions.getEditData).toHaveBeenCalledWith(testItem.id)
+  })
+  it('should show loading component when isLoading is true', () => {
+    const wrapper = mount(
+      <MemoryRouter>
+        <Create data={loadingData} actions={actions} match={match}/>
+      </MemoryRouter>
+    )
+    expect(wrapper.find(Loader).length).toEqual(1)
+  })
+})
+
+describe('test component when in create mode', () => {
+  const wrapper = mount(
+    <MemoryRouter>
+      < Create data={withLoadedData} actions={actions} match={createMatch} history={history}/>
+    </MemoryRouter>
+  )
+  const setInputValue = (selector, newValue) => {
+    wrapper.find(selector).instance().value = newValue
+  }
+  it('should pass the null to props selectedCategory for CategorySelect', () => {
+    expect(wrapper.find(CategorySelect).props().selectedCategory).toEqual(null)
+  })
+  it('should pass empty object for PriceForm', () => {
+    expect(wrapper.find(PriceForm).props().item).toEqual({})
+    expect(wrapper.find(Create).state('selectedTab')).toEqual(TYPE_OUTCOME)
+  })
+  it('submit the form, the addItem should not be triggered', () => {
+    wrapper.find('form').simulate('submit')
+    expect(actions.createItem).not.toHaveBeenCalled()
+  })
+  it('fill all inputs, and select the category, submit the form, addItem should be called', () => {
+    setInputValue('#title', 'new title')
+    setInputValue('#price', '200')
+    setInputValue('#date', '2020-05-10')
+    wrapper.find('.category-item').first().simulate('click')
+    wrapper.find('form').simulate('submit')
+    const testData = { title: 'new title', price: 200, date: '2020-05-10' }
+    expect(actions.createItem).toHaveBeenCalledWith(testData, testCategories[0].id)
+  })
+})
+
+describe('test component when in edit mode', () => {
+  const wrapper = mount(
+    <MemoryRouter>
+      < Create data={withLoadedData} actions={actions} match={match} history={history}/>
+    </MemoryRouter>
+  )
+  const setInputValue = (selector, newValue) => {
+    wrapper.find(selector).instance().value = newValue
+  }
+  const selectedCategory = testCategories.find(category => testItem.cid === category.id)
+  it('should pass the right category to props selectedCategory for CategorySelect', () => {
+    wrapper.update()
+    expect(wrapper.find(CategorySelect).props().selectedCategory).toEqual(selectedCategory)
+  })
+  it('modify some inputs submit the form, modifyItem should be called', () => {
+    setInputValue('#title', 'new title')
+    wrapper.find('form').simulate('submit')
+    const testData = { ...testItem, title: 'new title' }
+    expect(actions.updateItem).toHaveBeenCalledWith(testData, selectedCategory.id)
+  })
+})

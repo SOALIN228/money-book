@@ -5,11 +5,12 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from '../components/Tabs'
 import CategorySelect from '../components/CategorySelect'
 import PriceForm from '../components/PriceForm'
+import Loader from '../components/Loader'
 import { TYPE_INCOME, TYPE_OUTCOME } from '../utility'
 
 const tabsText = [TYPE_OUTCOME, TYPE_INCOME]
 
-class Create extends Component {
+export class Create extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -31,6 +32,10 @@ class Create extends Component {
     const tabIndex = tabsText.findIndex(text => text === selectedTab)
     return (
       <div className="create-page py-3 px-3 rounded mt-3" style={{ background: '#fff' }}>
+        {
+          data.isLoading &&
+          <Loader/>
+        }
         <Tabs activeIndex={tabIndex} onTabChange={this.tabChange}>
           <Tab>支出</Tab>
           <Tab>收入</Tab>
